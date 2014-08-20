@@ -1,0 +1,23 @@
+name: docker-rvm-ruby
+version: 0.0.1
+inherits: wercker-labs/docker
+type: service
+platform: ubuntu@12.04
+description: wercker box for ruby projects
+keywords:
+  - ruby
+  - rails
+  - docker
+  - rvm
+packages:
+  - docker-rvm-ruby@0.0.1
+script: |
+  curl -sSL https://get.rvm.io | bash -s stable
+  source $HOME/.rvm/scripts/rvm
+  rvm install 2.1.2
+  rvm --default use 2.1.2
+  echo "gem: --no-rdoc --no-ri" >> $HOME/.gemrc
+  echo "RAILS_ENV=test" | sudo tee -a /etc/environment
+  echo "RACK_ENV=test" | sudo tee -a /etc/environment
+  sudo apt-get -y install libmysqlclient-dev
+  sudo apt-get -y install libpq-dev
